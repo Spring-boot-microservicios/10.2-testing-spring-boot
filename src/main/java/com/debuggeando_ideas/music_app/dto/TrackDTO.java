@@ -13,6 +13,12 @@ public class TrackDTO implements Serializable{
 	
 	public TrackDTO() {}
 
+	public TrackDTO(Long trackId, String name, String lycris) {
+		this.trackId = trackId;
+		this.name = name;
+		this.lycris = lycris;
+	}
+
 	public Long getTrackId() {
 		return trackId;
 	}

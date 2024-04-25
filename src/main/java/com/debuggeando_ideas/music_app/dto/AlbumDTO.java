@@ -25,6 +25,15 @@ public class AlbumDTO implements Serializable {
 	
 	public AlbumDTO() {}
 
+	public AlbumDTO(Long albumId, String name, String autor, Double price, RecordCompanyDTO recordCompany, Set<TrackDTO> tracks) {
+		this.albumId = albumId;
+		this.name = name;
+		this.autor = autor;
+		this.price = price;
+		this.recordCompany = recordCompany;
+		this.tracks = tracks;
+	}
+
 	public Long getAlbumId() {
 		return albumId;
 	}
