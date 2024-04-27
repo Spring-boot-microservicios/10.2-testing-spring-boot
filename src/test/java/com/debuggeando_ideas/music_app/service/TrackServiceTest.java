@@ -64,5 +64,23 @@ public class TrackServiceTest {
         assertEquals(expected.size(), result.size());
         assertEquals(expected, result);
     }
+
+    @Test
+    @DisplayName("save should works")
+    public void save() {
+        this.trackService.save(DataDummy.TRACK_2);
+
+        verify(this.trackRepositoryMock, times(1))
+                .save(any(TrackEntity.class));
+    }
+
+    @Test
+    @DisplayName("delete should works")
+    public void delete() {
+        this.trackService.delete(VALID_ID);
+
+        verify(this.trackRepositoryMock, times(1))
+                .deleteById(eq(VALID_ID));
+    }
     
 }
