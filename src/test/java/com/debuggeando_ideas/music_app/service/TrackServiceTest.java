@@ -68,7 +68,13 @@ public class TrackServiceTest {
     @Test
     @DisplayName("save should works")
     public void save() {
-        this.trackService.save(DataDummy.TRACK_2);
+
+        when(this.trackRepositoryMock.save(DataDummy.TRACK_2))
+                .thenReturn(DataDummy.TRACK_2);
+
+        TrackEntity result = this.trackService.save(DataDummy.TRACK_2);
+
+        assertEquals(DataDummy.TRACK_2, result);
 
         verify(this.trackRepositoryMock, times(1))
                 .save(any(TrackEntity.class));
@@ -81,6 +87,36 @@ public class TrackServiceTest {
 
         verify(this.trackRepositoryMock, times(1))
                 .deleteById(eq(VALID_ID));
+    }
+
+    @Test
+    @DisplayName("update should works")
+    public void update() {
+        when(this.trackRepositoryMock.existsById(VALID_ID))
+                .thenReturn(true);
+
+        when(this.trackRepositoryMock.save(any(TrackEntity.class)))
+                .thenReturn(DataDummy.TRACK_2);
+
+        TrackEntity result = this.trackService.update(DataDummy.TRACK_1, VALID_ID);
+
+        assertEquals(DataDummy.TRACK_2, result);
+
+        verify(this.trackRepositoryMock, times(1))
+                .existsById(eq(VALID_ID));
+
+    }
+
+    @Test
+    @DisplayName("updateFailed should works")
+    public void updateFailed() {
+        when(this.trackRepositoryMock.existsById(INVALID_ID))
+                .thenReturn(false);
+
+        assertThrows(NoSuchElementException.class,
+            () -> this.trackService.update(DataDummy.TRACK_1, INVALID_ID)
+        );
+
     }
     
 }
