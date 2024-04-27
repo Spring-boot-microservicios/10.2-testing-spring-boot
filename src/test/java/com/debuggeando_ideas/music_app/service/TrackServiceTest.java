@@ -9,8 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,9 +17,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@ActiveProfiles("test") // Para obtener la configuracion .properties .yml
-public class TrackServiceTest {
+//@SpringBootTest
+//@ActiveProfiles("test") // Para obtener la configuracion .properties .yml
+public class TrackServiceTest extends ServiceSpec {
 
     @Mock
     private TrackRepository trackRepositoryMock;
