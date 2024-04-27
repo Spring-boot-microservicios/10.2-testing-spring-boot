@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -49,6 +50,19 @@ public class TrackServiceTest {
         assertThrows(NoSuchElementException.class,
             () -> this.trackService.findById(INVALID_ID)
         );
+    }
+
+    @Test
+    @DisplayName("getAll should works")
+    public void getAll() {
+        Set<TrackEntity> expected = Set.of(DataDummy.TRACK_4, DataDummy.TRACK_2);
+
+        when(this.trackService.getAll()).thenReturn(expected);
+
+        Set<TrackEntity> result = this.trackService.getAll();
+
+        assertEquals(expected.size(), result.size());
+        assertEquals(expected, result);
     }
     
 }
