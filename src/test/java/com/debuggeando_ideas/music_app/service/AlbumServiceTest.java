@@ -151,4 +151,34 @@ public class AlbumServiceTest extends ServiceSpec {
         verify(this.albumRepositoryMock, times(1)).save(eq(DataDummy.ALBUM));
     }
 
+    @Test
+    @DisplayName("findBetweenPrice should works")
+    public void findBetweenPrice() {
+        when(this.albumRepositoryMock.findByPriceBetween(anyDouble(), anyDouble()))
+                .thenReturn(Set.of(DataDummy.ALBUM));
+
+        Set<AlbumDTO> result = this.albumService.findBetweenPrice(10.0, 100.0);
+
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+
+        verify(this.albumRepositoryMock, times(1)).findByPriceBetween(eq(10.0), eq(100.0));
+    }
+
+    @Test
+    @DisplayName("findBetweenPrice isEmpty should works")
+    public void findBetweenPriceIsEmpty() {
+
+        when(this.albumRepositoryMock.findByPriceBetween(anyDouble(), anyDouble()))
+                .thenReturn(Collections.emptySet());
+
+        assertThrows(NoSuchElementException.class,
+            () -> {
+                this.albumService.findBetweenPrice(0.0, 1.0);
+                verify(this.albumRepositoryMock, times(1)).findByPriceBetween(eq(0.0), eq(1.0));
+            }
+        );
+
+    }
+
 }
