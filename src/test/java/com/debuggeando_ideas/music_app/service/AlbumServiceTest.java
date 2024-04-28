@@ -2,6 +2,7 @@ package com.debuggeando_ideas.music_app.service;
 
 import com.debuggeando_ideas.music_app.DataDummy;
 import com.debuggeando_ideas.music_app.dto.AlbumDTO;
+import com.debuggeando_ideas.music_app.entity.AlbumEntity;
 import com.debuggeando_ideas.music_app.repository.AlbumRepository;
 import com.debuggeando_ideas.music_app.repository.RecordCompanyRepository;
 import com.debuggeando_ideas.music_app.repository.TrackRepository;
@@ -11,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -70,5 +70,48 @@ public class AlbumServiceTest extends ServiceSpec {
 
     }
 
+    @Test
+    @DisplayName("getAll Failed should works")
+    public void getAllFailed() {
+        when(this.albumRepositoryMock.findAll())
+                .thenReturn(Collections.emptyList());
+
+        assertThrows(NoSuchElementException.class,
+            () -> {
+                this.albumService.getAll();
+                verify(this.albumRepositoryMock, times(1)).findAll();
+            }
+        );
+    }
+
+    @Test
+    @DisplayName("getAll should works")
+    public void getAll() {
+        when(this.albumRepositoryMock.findAll())
+                .thenReturn(List.of(DataDummy.ALBUM));
+
+        Set<AlbumDTO> result = this.albumService.getAll();
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+
+        verify(this.albumRepositoryMock, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("save should works")
+    public void save() {
+        when(this.recordCompanyRepositoryMock.findById(anyString()))
+                .thenReturn(Optional.of(DataDummy.RECORD_COMPANY));
+
+        when(this.albumRepositoryMock.save(any(AlbumEntity.class)))
+                .thenReturn(DataDummy.ALBUM);
+
+        AlbumDTO result = this.albumService.save(DataDummy.ALBUM_DTO);
+
+        assertEquals(DataDummy.ALBUM_DTO, result);
+
+        verify(this.recordCompanyRepositoryMock, times(1)).findById(anyString());
+        verify(this.albumRepositoryMock, times(1)).save(any(AlbumEntity.class));
+    }
 
 }
