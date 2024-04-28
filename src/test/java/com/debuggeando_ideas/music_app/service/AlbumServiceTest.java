@@ -114,4 +114,41 @@ public class AlbumServiceTest extends ServiceSpec {
         verify(this.albumRepositoryMock, times(1)).save(any(AlbumEntity.class));
     }
 
+    @Test
+    @DisplayName("delete should works")
+    public void delete() {
+        this.albumService.delete(VALID_ID);
+
+        verify(this.albumRepositoryMock, times(1)).deleteById(eq(VALID_ID));
+    }
+
+    @Test
+    @DisplayName("delete failed should works")
+    public void deleteFailed() {
+
+        assertThrows(NoSuchElementException.class,
+            () -> {
+                this.albumService.delete(INVALID_ID);
+                verify(this.albumRepositoryMock, times(1)).deleteById(eq(INVALID_ID));
+            }
+        );
+
+    }
+
+    @Test
+    @DisplayName("update should works")
+    public void update() {
+        when(this.recordCompanyRepositoryMock.findById(anyString()))
+                .thenReturn(Optional.of(DataDummy.RECORD_COMPANY));
+
+        when(this.albumRepositoryMock.save(any(AlbumEntity.class)))
+                .thenReturn(DataDummy.ALBUM);
+
+        AlbumDTO result = this.albumService.update(DataDummy.ALBUM_DTO, VALID_ID);
+
+        assertEquals(DataDummy.ALBUM_DTO, result);
+
+        verify(this.albumRepositoryMock, times(1)).save(eq(DataDummy.ALBUM));
+    }
+
 }
