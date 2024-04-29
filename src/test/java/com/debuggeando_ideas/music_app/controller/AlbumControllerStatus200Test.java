@@ -77,4 +77,27 @@ public class AlbumControllerStatus200Test extends AlbumControllerSpec {
         verify(this.albumServiceMock).save(eq(DataDummy.ALBUM_DTO)); // eq() para ser mas estricto el retorno
     }
 
+    @Test
+    @DisplayName("call update should works")
+    public void update() throws Exception {
+        final String url = RESOURCE_PATH + "/" + VALID_ID;
+
+        final AlbumDTO albumToUpdate = DataDummy.ALBUM_DTO;
+        albumToUpdate.setAutor("Autor updated");
+
+        when(this.albumServiceMock.update(eq(albumToUpdate), eq(VALID_ID)))
+                .thenReturn(albumToUpdate);
+
+        this.mockMvc.perform(
+            put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(albumToUpdate))
+        )
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.autor").value("Autor updated"));
+
+        verify(this.albumServiceMock).update(eq(albumToUpdate), eq(VALID_ID));
+    }
+
 }
