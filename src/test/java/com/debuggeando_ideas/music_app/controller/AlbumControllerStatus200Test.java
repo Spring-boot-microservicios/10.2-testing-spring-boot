@@ -48,8 +48,13 @@ public class AlbumControllerStatus200Test extends AlbumControllerSpec {
         this.mockMvc.perform(
             get(url).contentType(MediaType.APPLICATION_JSON)
         )
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value(DataDummy.ALBUM_DTO.getName()))
+        .andExpect(jsonPath("$.autor").value(DataDummy.ALBUM_DTO.getAutor()))
+        .andExpect(jsonPath("$.price").value(DataDummy.ALBUM_DTO.getPrice()));
 
+        verify(this.albumServiceMock).findById(eq(VALID_ID));
      }
 
 }
