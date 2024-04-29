@@ -106,9 +106,6 @@ public class AlbumServiceTest extends ServiceSpec {
         when(this.recordCompanyRepositoryMock.findById(anyString()))
                 .thenReturn(Optional.of(DataDummy.RECORD_COMPANY));
 
-        when(this.albumRepositoryMock.save(any(AlbumEntity.class)))
-                .thenReturn(DataDummy.ALBUM);
-
         AlbumDTO result = this.albumService.save(DataDummy.ALBUM_DTO);
 
         assertEquals(DataDummy.ALBUM_DTO, result);
@@ -143,9 +140,6 @@ public class AlbumServiceTest extends ServiceSpec {
     public void update() {
         when(this.recordCompanyRepositoryMock.findById(anyString()))
                 .thenReturn(Optional.of(DataDummy.RECORD_COMPANY));
-
-        when(this.albumRepositoryMock.save(any(AlbumEntity.class)))
-                .thenReturn(DataDummy.ALBUM);
 
         AlbumDTO result = this.albumService.update(DataDummy.ALBUM_DTO, VALID_ID);
 
