@@ -31,7 +31,11 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>2.1.214</version>
-			<scope>runtime</scope>
+			<!--Sirve para ejecutar en tiempo de ejecucion-->
+			<!--<scope>runtime</scope>-->
+
+			<!--Falla por que es de tipo test al momento de ejecutar el proyecto de java-->
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
