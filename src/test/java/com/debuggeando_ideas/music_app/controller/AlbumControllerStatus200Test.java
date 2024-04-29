@@ -28,7 +28,6 @@ public class AlbumControllerStatus200Test extends AlbumControllerSpec {
     private ObjectMapper objectMapper;
 
     private static final Long VALID_ID = 1L;
-    private static final Long INVALID_ID = 2L;
     private static final String RESOURCE_PATH = "/v1/album";
 
     @BeforeEach
