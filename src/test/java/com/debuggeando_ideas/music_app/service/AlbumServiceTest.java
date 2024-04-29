@@ -6,6 +6,7 @@ import com.debuggeando_ideas.music_app.entity.AlbumEntity;
 import com.debuggeando_ideas.music_app.repository.AlbumRepository;
 import com.debuggeando_ideas.music_app.repository.RecordCompanyRepository;
 import com.debuggeando_ideas.music_app.repository.TrackRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,11 @@ public class AlbumServiceTest extends ServiceSpec {
 
         when(this.albumRepositoryMock.save(any(AlbumEntity.class)))
                 .thenReturn(DataDummy.ALBUM);
+    }
+
+    @AfterEach
+    public void resetMocks() {
+        reset(this.albumRepositoryMock);
     }
 
     @Test
