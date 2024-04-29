@@ -45,6 +45,9 @@ public class AlbumServiceTest extends ServiceSpec {
 
         when(this.albumRepositoryMock.findById(INVALID_ID))
                 .thenReturn(Optional.empty());
+
+        when(this.albumRepositoryMock.save(any(AlbumEntity.class)))
+                .thenReturn(DataDummy.ALBUM);
     }
 
     @Test
@@ -178,6 +181,49 @@ public class AlbumServiceTest extends ServiceSpec {
                 verify(this.albumRepositoryMock, times(1)).findByPriceBetween(eq(0.0), eq(1.0));
             }
         );
+
+    }
+
+    @Test
+    @DisplayName("addTrack should works")
+    void addTrack() {
+        assertThrows(NoSuchElementException.class,
+            () -> {
+                this.albumService.addTrack(DataDummy.TRACK_1_DTO, INVALID_ID);
+                verify(this.albumRepositoryMock, times(1)).findById(eq(INVALID_ID));
+            }
+        );
+
+        var result = this.albumService.addTrack(DataDummy.TRACK_1_DTO, VALID_ID);
+
+        assertEquals(DataDummy.ALBUM_DTO, result);
+        verify(this.albumRepositoryMock, times(2)).findById(eq(VALID_ID));
+        verify(this.albumRepositoryMock, times(1)).save(any(AlbumEntity.class));
+
+    }
+
+    @Test
+    @DisplayName("removeTrack should works")
+    void removeTrack() {
+        when(this.trackRepositoryMock.existsById(INVALID_ID))
+                .thenReturn(false);
+
+        assertThrows(NoSuchElementException.class,
+            () -> {
+                this.albumService.removeTrack(DataDummy.TRACK_1_DTO, INVALID_ID);
+                verify(this.albumRepositoryMock, times(1)).findById(eq(INVALID_ID));
+            }
+        );
+
+        when(this.trackRepositoryMock.existsById(DataDummy.TRACK_1_DTO.getTrackId()))
+                .thenReturn(true);
+
+        var result = this.albumService.removeTrack(DataDummy.TRACK_1_DTO, VALID_ID);
+
+        assertEquals(DataDummy.ALBUM_DTO, result);
+
+        verify(this.albumRepositoryMock, times(1)).findById(eq(VALID_ID));
+        verify(this.albumRepositoryMock, times(2)).save(any(AlbumEntity.class));
 
     }
 
