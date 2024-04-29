@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.NoSuchElementException;
 
@@ -75,5 +76,39 @@ public class AlbumControllerStatus400Test extends AlbumControllerSpec {
         .andExpect(jsonPath("$.errors.autor").value("Must start with Upper"));
     }
 
+    @Test
+    @DisplayName("call update should response 404")
+    void update() throws Exception {
+        final String uri = RESOURCE_PATH + "/" + INVALID_ID;
+
+        final var albumToUpdate = DataDummy.ALBUM_DTO;
+        albumToUpdate.setAutor("Autor updated");
+
+        when(this.albumServiceMock.update(eq(albumToUpdate), eq(INVALID_ID)))
+                .thenThrow(NoSuchElementException.class);
+
+        mockMvc.perform(
+            put(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(albumToUpdate)))
+            .andExpect(status().isNotFound()
+        );
+
+        verify(this.albumServiceMock).update(eq(albumToUpdate), eq(INVALID_ID));
+    }
+
+    @Test
+    @DisplayName("call delete should response 404")
+    void delete() throws Exception {
+        final String uri = RESOURCE_PATH + "/" + INVALID_ID;
+
+        doThrow(NoSuchElementException.class)
+                .when(this.albumServiceMock).delete(eq(INVALID_ID));
+
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(uri))
+                .andExpect(status().isNotFound());
+
+        verify(this.albumServiceMock).delete(eq(INVALID_ID));
+    }
 
 }
