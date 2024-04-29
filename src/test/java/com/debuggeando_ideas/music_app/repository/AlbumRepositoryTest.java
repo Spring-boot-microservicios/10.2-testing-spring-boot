@@ -67,6 +67,29 @@ public class AlbumRepositoryTest extends RepositorySpec {
 
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
+
+        // No se puede usar el verify
     }
+
+    @Test
+    @DisplayName("deleteById should works")
+    public void deleteById() {
+        List<AlbumEntity> records = (List<AlbumEntity>) this.albumRepository.findAll();
+        int totalRecords = records.size();
+
+        assertEquals(2, totalRecords);
+
+        Optional<AlbumEntity> albumToDelete = this.albumRepository.findById(VALID_ID);
+
+        // Realizamos la eliminacion
+        this.albumRepository.deleteById(albumToDelete.get().getAlbumId());
+
+        records = (List<AlbumEntity>) this.albumRepository.findAll();
+        totalRecords = records.size();
+
+        // Comprobamos que se haya eliminado
+        assertEquals(1, totalRecords);
+    }
+
 
 }
