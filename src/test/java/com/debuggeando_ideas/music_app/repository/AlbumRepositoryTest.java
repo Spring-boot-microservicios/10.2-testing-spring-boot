@@ -1,11 +1,14 @@
 package com.debuggeando_ideas.music_app.repository;
 
+import com.debuggeando_ideas.music_app.DataDummy;
 import com.debuggeando_ideas.music_app.entity.AlbumEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,6 +41,32 @@ public class AlbumRepositoryTest extends RepositorySpec {
         // Failed
         result = this.albumRepository.findById(INVALID_ID);
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("findAll should works")
+    public void findAll() {
+        List<AlbumEntity> result = (List<AlbumEntity>) this.albumRepository.findAll();
+
+        assertFalse(result.isEmpty());
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    @DisplayName("save should works")
+    public void save() {
+        AlbumEntity result = this.albumRepository.save(DataDummy.ALBUM);
+
+        assertEquals(DataDummy.ALBUM, result);
+    }
+
+    @Test
+    @DisplayName("findByPriceBetween should works")
+    public void findByPriceBetween() {
+        Set<AlbumEntity> result = this.albumRepository.findByPriceBetween(270.00, 271.00);
+
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
     }
 
 }
